@@ -33,6 +33,64 @@ model User {
   lastActive   DateTime?         @default(now())
   role         UserRole          @default(USER)
   status       UserAccountStatus @default(ACTIVE)
+  accounts     Account[]
 
   @@index([createdAt])
+}
+
+enum AccountKind {
+  OPERATING
+  RESERVE
+  SAVINGS
+}
+
+enum AccountState {
+  OPEN
+  FROZEN
+  CLOSED
+}
+
+enum TransactionStatus {
+  PENDING
+  POSTED
+  DECLINED
+  REVERSED
+}
+
+model Account {
+  id String @id @default(uuid())
+
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  kind           AccountKind   @default(OPERATING)
+  last4          String        @db.Char(4)
+  currency       String        @db.Char(3)
+  availableMinor BigInt        @default(0)
+  currentMinor   BigInt        @default(0)
+  state          AccountState  @default(OPEN)
+  openedAt       DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  transactions   Transaction[]
+
+  @@index([userId])
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  accountId        String
+  account          Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountMinor      BigInt
+  currency         String            @db.Char(3)
+  status           TransactionStatus @default(PENDING)
+  description      String
+  counterpartyName String?
+  category         String?
+  reference        String
+  flagged          Boolean           @default(false)
+  postedAt         DateTime?
+  createdAt        DateTime          @default(now())
+
+  @@index([accountId, postedAt])
 }

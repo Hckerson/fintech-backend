@@ -8,6 +8,7 @@ import {
     PrismaClient,
     UserAccountStatus,
 } from '../generated/prisma/client';
+import { seedLedger } from './seed-ledger';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -42,7 +43,7 @@ async function main() {
     try {
         console.log('Seeding database...');
 
-        await prisma.user.create({
+        const admin = await prisma.user.create({
             data: buildUser({
                 fullName: 'Admin User',
                 email: 'admin@example.com',
@@ -50,6 +51,7 @@ async function main() {
                 status: UserAccountStatus.ACTIVE,
             }),
         });
+        await seedLedger(prisma, admin.id);
 
         for (let i = 0; i < 20; i++) {
             await prisma.user.create({ data: buildUser({}) });
