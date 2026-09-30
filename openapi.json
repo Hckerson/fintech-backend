@@ -1,807 +1,1193 @@
 {
-  "openapi": "3.0.0",
-  "paths": {
-    "/api/auth/register": {
-      "post": {
-        "operationId": "AuthController_register",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterDto"
-              }
+    "openapi": "3.0.0",
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "operationId": "AuthController_register",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/AuthResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "User already exists"
+                    }
+                },
+                "summary": "Register a new user",
+                "tags": [
+                    "auth"
+                ]
             }
-          }
         },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
+        "/api/auth/login": {
+            "post": {
+                "operationId": "AuthController_login",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/AuthResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                },
+                "summary": "Login and get JWT token",
+                "tags": [
+                    "auth"
+                ]
+            }
+        },
+        "/api/users": {
+            "post": {
+                "operationId": "UsersController_create",
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
                     {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
+                        "bearer": []
+                    }
+                ],
+                "summary": "Create a new user (Admin only)",
+                "tags": [
+                    "users"
+                ]
+            },
+            "get": {
+                "operationId": "UsersController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/UserResponseDto"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Get all users (Admin only)",
+                "tags": [
+                    "users"
+                ]
+            }
+        },
+        "/api/users/me": {
+            "get": {
+                "operationId": "UsersController_getMe",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Get current user profile",
+                "tags": [
+                    "users"
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "operationId": "UsersController_findOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Get user by ID",
+                "tags": [
+                    "users"
+                ]
+            },
+            "patch": {
+                "operationId": "UsersController_update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateUserDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Update user profile",
+                "tags": [
+                    "users"
+                ]
+            },
+            "delete": {
+                "operationId": "UsersController_remove",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "required": true,
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/UserResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Delete user (Admin only)",
+                "tags": [
+                    "users"
+                ]
+            }
+        },
+        "/api/health": {
+            "get": {
+                "operationId": "HealthController_check",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/HealthResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "summary": "Report that the API is up",
+                "tags": [
+                    "health"
+                ]
+            }
+        },
+        "/api/stats/users/total": {
+            "get": {
+                "operationId": "StatsController_usersTotal",
+                "parameters": [
+                    {
+                        "name": "period",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "day",
+                                "month",
+                                "year"
+                            ]
+                        }
                     },
                     {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/AuthResponseDto"
+                        "name": "date",
+                        "required": false,
+                        "in": "query",
+                        "description": "Any instant inside the period. Defaults to now.",
+                        "schema": {
+                            "example": "2026-09-22",
+                            "type": "string"
                         }
-                      },
-                      "required": ["data"]
                     }
-                  ]
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "User already exists"
-          }
-        },
-        "summary": "Register a new user",
-        "tags": ["auth"]
-      }
-    },
-    "/api/auth/login": {
-      "post": {
-        "operationId": "AuthController_login",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LoginDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/PeriodTotalResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
                     {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
+                        "bearer": []
+                    }
+                ],
+                "summary": "Users created in one day, month or year (Admin only)",
+                "tags": [
+                    "stats"
+                ]
+            }
+        },
+        "/api/stats/users/series": {
+            "get": {
+                "operationId": "StatsController_usersSeries",
+                "parameters": [
+                    {
+                        "name": "period",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "day",
+                                "month",
+                                "year"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/PeriodSeriesResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "Users created per day, month or year up to the current one (Admin only)",
+                "tags": [
+                    "stats"
+                ]
+            }
+        },
+        "/api/accounts": {
+            "get": {
+                "operationId": "AccountsController_findAll",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/AccountResponseDto"
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ],
+                "summary": "The signed-in member's accounts with balances",
+                "tags": [
+                    "accounts"
+                ]
+            }
+        },
+        "/api/cash-flow": {
+            "get": {
+                "operationId": "CashFlowController_series",
+                "parameters": [
+                    {
+                        "name": "range",
+                        "required": true,
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "30d",
+                                "90d",
+                                "12m"
+                            ]
+                        }
                     },
                     {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/AuthResponseDto"
+                        "name": "currency",
+                        "required": false,
+                        "in": "query",
+                        "description": "Defaults to the currency of the member's oldest account.",
+                        "schema": {
+                            "example": "GBP",
+                            "type": "string"
                         }
-                      },
-                      "required": ["data"]
                     }
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid credentials"
-          }
-        },
-        "summary": "Login and get JWT token",
-        "tags": ["auth"]
-      }
-    },
-    "/api/users": {
-      "post": {
-        "operationId": "UsersController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/UserResponseDto"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ApiEnvelopeDto"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/CashFlowSeriesResponseDto"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
                         }
-                      },
-                      "required": ["data"]
                     }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Create a new user (Admin only)",
-        "tags": ["users"]
-      },
-      "get": {
-        "operationId": "UsersController_findAll",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
+                },
+                "security": [
                     {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/UserResponseDto"
-                          }
-                        }
-                      },
-                      "required": ["data"]
+                        "bearer": []
                     }
-                  ]
-                }
-              }
+                ],
+                "summary": "Posted inflow, outflow and net per period in one currency",
+                "tags": [
+                    "cash-flow"
+                ]
             }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get all users (Admin only)",
-        "tags": ["users"]
-      }
-    },
-    "/api/users/me": {
-      "get": {
-        "operationId": "UsersController_getMe",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/UserResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get current user profile",
-        "tags": ["users"]
-      }
-    },
-    "/api/users/{id}": {
-      "get": {
-        "operationId": "UsersController_findOne",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/UserResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Get user by ID",
-        "tags": ["users"]
-      },
-      "patch": {
-        "operationId": "UsersController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/UserResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Update user profile",
-        "tags": ["users"]
-      },
-      "delete": {
-        "operationId": "UsersController_remove",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/UserResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Delete user (Admin only)",
-        "tags": ["users"]
-      }
-    },
-    "/api/health": {
-      "get": {
-        "operationId": "HealthController_check",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/HealthResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "summary": "Report that the API is up",
-        "tags": ["health"]
-      }
-    },
-    "/api/stats/users/total": {
-      "get": {
-        "operationId": "StatsController_usersTotal",
-        "parameters": [
-          {
-            "name": "period",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": ["day", "month", "year"]
-            }
-          },
-          {
-            "name": "date",
-            "required": false,
-            "in": "query",
-            "description": "Any instant inside the period. Defaults to now.",
-            "schema": {
-              "example": "2026-09-22",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/PeriodTotalResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Users created in one day, month or year (Admin only)",
-        "tags": ["stats"]
-      }
-    },
-    "/api/stats/users/series": {
-      "get": {
-        "operationId": "StatsController_usersSeries",
-        "parameters": [
-          {
-            "name": "period",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": ["day", "month", "year"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/ApiEnvelopeDto"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/PeriodSeriesResponseDto"
-                        }
-                      },
-                      "required": ["data"]
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Users created per day, month or year up to the current one (Admin only)",
-        "tags": ["stats"]
-      }
-    }
-  },
-  "info": {
-    "title": "API",
-    "description": "Backend REST API documentation",
-    "version": "1.0",
-    "contact": {}
-  },
-  "tags": [],
-  "servers": [],
-  "components": {
-    "securitySchemes": {
-      "bearer": {
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "type": "http"
-      }
-    },
-    "schemas": {
-      "ApiEnvelopeDto": {
-        "type": "object",
-        "properties": {
-          "statusCode": {
-            "type": "number"
-          },
-          "message": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": ["statusCode", "message", "timestamp"]
-      },
-      "AuthResponseUserDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "role": {
-            "type": "string"
-          }
-        },
-        "required": ["id", "name", "email", "role"]
-      },
-      "AuthResponseDto": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/AuthResponseUserDto"
-          },
-          "accessToken": {
-            "type": "string"
-          }
-        },
-        "required": ["user"]
-      },
-      "RegisterDto": {
-        "type": "object",
-        "properties": {
-          "fullName": {
-            "type": "string",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "password123",
-            "minLength": 8
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "+1234567890"
-          }
-        },
-        "required": ["fullName", "email", "password"]
-      },
-      "LoginDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "password123"
-          }
-        },
-        "required": ["email", "password"]
-      },
-      "UserResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "avatar": {
-            "type": "string",
-            "nullable": true
-          },
-          "bio": {
-            "type": "string",
-            "nullable": true
-          },
-          "role": {
-            "type": "string",
-            "enum": ["ADMIN", "USER"]
-          },
-          "status": {
-            "type": "string",
-            "enum": ["ACTIVE", "PENDING", "SUSPENDED"]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastActive": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "required": [
-          "id",
-          "fullName",
-          "email",
-          "phoneNumber",
-          "avatar",
-          "bio",
-          "role",
-          "status",
-          "createdAt",
-          "updatedAt",
-          "lastActive"
-        ]
-      },
-      "CreateUserDto": {
-        "type": "object",
-        "properties": {
-          "fullName": {
-            "type": "string",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "password123",
-            "minLength": 8
-          },
-          "role": {
-            "type": "string",
-            "enum": ["ADMIN", "USER"],
-            "default": "USER"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "+1234567890"
-          },
-          "bio": {
-            "type": "string",
-            "example": "Short profile bio"
-          }
-        },
-        "required": ["fullName", "email", "password"]
-      },
-      "UpdateUserDto": {
-        "type": "object",
-        "properties": {
-          "fullName": {
-            "type": "string",
-            "example": "John Doe"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "password123",
-            "minLength": 8
-          },
-          "role": {
-            "type": "string",
-            "enum": ["ADMIN", "USER"],
-            "default": "USER"
-          },
-          "phoneNumber": {
-            "type": "string",
-            "example": "+1234567890"
-          },
-          "bio": {
-            "type": "string",
-            "example": "Short profile bio"
-          },
-          "status": {
-            "type": "string",
-            "enum": ["ACTIVE", "PENDING", "SUSPENDED"]
-          }
         }
-      },
-      "HealthResponseDto": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": ["ok"]
-          }
-        },
-        "required": ["status"]
-      },
-      "PeriodTotalResponseDto": {
-        "type": "object",
-        "properties": {
-          "period": {
-            "type": "string",
-            "enum": ["day", "month", "year"]
-          },
-          "start": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "end": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "total": {
-            "type": "number"
-          }
-        },
-        "required": ["period", "start", "end", "total"]
-      },
-      "SeriesPointDto": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "example": "2026-09"
-          },
-          "value": {
-            "type": "number"
-          }
-        },
-        "required": ["key", "value"]
-      },
-      "PeriodSeriesResponseDto": {
-        "type": "object",
-        "properties": {
-          "period": {
-            "type": "string",
-            "enum": ["day", "month", "year"]
-          },
-          "start": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "end": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "points": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SeriesPointDto"
+    },
+    "info": {
+        "title": "API",
+        "description": "Backend REST API documentation",
+        "version": "1.0",
+        "contact": {}
+    },
+    "tags": [],
+    "servers": [],
+    "components": {
+        "securitySchemes": {
+            "bearer": {
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "type": "http"
             }
-          }
         },
-        "required": ["period", "start", "end", "points"]
-      }
+        "schemas": {
+            "ApiEnvelopeDto": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "message",
+                    "timestamp"
+                ]
+            },
+            "AuthResponseUserDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "role"
+                ]
+            },
+            "AuthResponseDto": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/AuthResponseUserDto"
+                    },
+                    "accessToken": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "user"
+                ]
+            },
+            "RegisterDto": {
+                "type": "object",
+                "properties": {
+                    "fullName": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123",
+                        "minLength": 8
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    }
+                },
+                "required": [
+                    "fullName",
+                    "email",
+                    "password"
+                ]
+            },
+            "LoginDto": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "john@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "UserResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "avatar": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "bio": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "ADMIN",
+                            "USER"
+                        ]
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "PENDING",
+                            "SUSPENDED"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "lastActive": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "id",
+                    "fullName",
+                    "email",
+                    "phoneNumber",
+                    "avatar",
+                    "bio",
+                    "role",
+                    "status",
+                    "createdAt",
+                    "updatedAt",
+                    "lastActive"
+                ]
+            },
+            "CreateUserDto": {
+                "type": "object",
+                "properties": {
+                    "fullName": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123",
+                        "minLength": 8
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "ADMIN",
+                            "USER"
+                        ],
+                        "default": "USER"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "bio": {
+                        "type": "string",
+                        "example": "Short profile bio"
+                    }
+                },
+                "required": [
+                    "fullName",
+                    "email",
+                    "password"
+                ]
+            },
+            "UpdateUserDto": {
+                "type": "object",
+                "properties": {
+                    "fullName": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "john@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password123",
+                        "minLength": 8
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "ADMIN",
+                            "USER"
+                        ],
+                        "default": "USER"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "+1234567890"
+                    },
+                    "bio": {
+                        "type": "string",
+                        "example": "Short profile bio"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "ACTIVE",
+                            "PENDING",
+                            "SUSPENDED"
+                        ]
+                    }
+                }
+            },
+            "HealthResponseDto": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "ok"
+                        ]
+                    }
+                },
+                "required": [
+                    "status"
+                ]
+            },
+            "PeriodTotalResponseDto": {
+                "type": "object",
+                "properties": {
+                    "period": {
+                        "type": "string",
+                        "enum": [
+                            "day",
+                            "month",
+                            "year"
+                        ]
+                    },
+                    "start": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "end": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "total": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "period",
+                    "start",
+                    "end",
+                    "total"
+                ]
+            },
+            "SeriesPointDto": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "example": "2026-09"
+                    },
+                    "value": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "key",
+                    "value"
+                ]
+            },
+            "PeriodSeriesResponseDto": {
+                "type": "object",
+                "properties": {
+                    "period": {
+                        "type": "string",
+                        "enum": [
+                            "day",
+                            "month",
+                            "year"
+                        ]
+                    },
+                    "start": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "end": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "points": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SeriesPointDto"
+                        }
+                    }
+                },
+                "required": [
+                    "period",
+                    "start",
+                    "end",
+                    "points"
+                ]
+            },
+            "MoneyDto": {
+                "type": "object",
+                "properties": {
+                    "amountMinor": {
+                        "type": "string",
+                        "example": "-125000",
+                        "description": "Signed integer in minor units."
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "GBP",
+                        "description": "ISO 4217 code."
+                    }
+                },
+                "required": [
+                    "amountMinor",
+                    "currency"
+                ]
+            },
+            "AccountResponseDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "kind": {
+                        "type": "string",
+                        "enum": [
+                            "OPERATING",
+                            "RESERVE",
+                            "SAVINGS"
+                        ]
+                    },
+                    "last4": {
+                        "type": "string",
+                        "example": "4821"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "GBP"
+                    },
+                    "available": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "current": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "state": {
+                        "type": "string",
+                        "enum": [
+                            "OPEN",
+                            "FROZEN",
+                            "CLOSED"
+                        ]
+                    },
+                    "openedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "name",
+                    "kind",
+                    "last4",
+                    "currency",
+                    "available",
+                    "current",
+                    "state",
+                    "openedAt"
+                ]
+            },
+            "CashFlowPointDto": {
+                "type": "object",
+                "properties": {
+                    "inflow": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "outflow": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "net": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "periodStart": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "inflow",
+                    "outflow",
+                    "net",
+                    "periodStart"
+                ]
+            },
+            "CashFlowTotalsDto": {
+                "type": "object",
+                "properties": {
+                    "inflow": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "outflow": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    },
+                    "net": {
+                        "$ref": "#/components/schemas/MoneyDto"
+                    }
+                },
+                "required": [
+                    "inflow",
+                    "outflow",
+                    "net"
+                ]
+            },
+            "CashFlowSeriesResponseDto": {
+                "type": "object",
+                "properties": {
+                    "range": {
+                        "type": "string",
+                        "enum": [
+                            "30d",
+                            "90d",
+                            "12m"
+                        ]
+                    },
+                    "granularity": {
+                        "type": "string",
+                        "enum": [
+                            "day",
+                            "month",
+                            "year"
+                        ]
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "GBP"
+                    },
+                    "points": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CashFlowPointDto"
+                        }
+                    },
+                    "totals": {
+                        "$ref": "#/components/schemas/CashFlowTotalsDto"
+                    }
+                },
+                "required": [
+                    "range",
+                    "granularity",
+                    "currency",
+                    "points",
+                    "totals"
+                ]
+            }
+        }
     }
-  }
 }
